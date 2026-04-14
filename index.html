@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -904,7 +904,7 @@
   // ── Theme toggle (persists across sessions)
   const html = document.documentElement;
   const btn  = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('theme') || 'dark';
+  const saved = localStorage.getItem('theme') || 'light';
   html.setAttribute('data-theme', saved);
   btn.textContent = saved === 'dark' ? '☀️' : '🌙';
 
