@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rabin Kunnananickal Binu – Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── DARK THEME (default) ── */
+    [data-theme="dark"] {
+      --bg:      #0b0f1a;
+      --surface: #111827;
+      --border:  #1e2d45;
+      --accent:  #38bdf8;
+      --accent2: #818cf8;
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --card:    #131c2e;
+      --bio:     #94a3b8;
+      --nav-bg:  rgba(11,15,26,.9);
+      --h-color: #f1f5f9;
+    }
+
+    /* ── LIGHT THEME ── */
+    [data-theme="light"] {
+      --bg:      #f8fafc;
+      --surface: #ffffff;
+      --border:  #e2e8f0;
+      --accent:  #0284c7;
+      --accent2: #6366f1;
+      --text:    #1e293b;
+      --muted:   #64748b;
+      --card:    #f1f5f9;
+      --bio:     #475569;
+      --nav-bg:  rgba(248,250,252,.92);
+      --h-color: #0f172a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      transition: background .3s, color .3s;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 64px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      transition: background .3s, border-color .3s;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .theme-toggle {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background .3s, border-color .3s, transform .2s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { transform: rotate(20deg); border-color: var(--accent); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%;
+      z-index: 199;
+      flex-direction: column;
+      gap: 0;
+      transition: background .3s;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color .2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: calc(64px + 50px) 5% 70px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 30%, rgba(56,189,248,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(129,140,248,.06) 0%, transparent 60%);
+    }
+    [data-theme="light"] .hero-bg {
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 30%, rgba(2,132,199,.05) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(99,102,241,.04) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: .25;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 760px; width: 100%; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(56,189,248,.1);
+      border: 1px solid rgba(56,189,248,.25);
+      border-radius: 100px;
+      padding: .3rem .9rem;
+      font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--h-color);
+      animation: fadeUp .6s .1s ease both;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 2.5vw, 1.1rem);
+      color: var(--muted);
+      margin: 1.2rem 0 2rem;
+      max-width: 540px;
+      animation: fadeUp .6s .2s ease both;
+    }
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      margin-bottom: 2rem;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .tag {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .25rem .75rem;
+      font-size: .75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+    }
+    .hero-cta {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      animation: fadeUp .6s .4s ease both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .75rem 1.5rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(56,189,248,.25);
+    }
+    [data-theme="dark"] .btn-primary { color: #0b0f1a; }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(56,189,248,.4); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      animation: fadeUp .6s .5s ease both;
+    }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-lbl { font-size: .78rem; color: var(--muted); margin-top: .25rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 5%; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.8rem);
+      color: var(--h-color);
+      letter-spacing: -.01em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--surface); transition: background .3s; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .about-bio { font-size: 1rem; color: var(--bio); line-height: 1.9; }
+    .about-bio p + p { margin-top: 1rem; }
+    .contact-list { margin-top: 1.8rem; display: flex; flex-direction: column; gap: .65rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: .75rem; font-size: .88rem; color: var(--muted); flex-wrap: wrap; }
+    .contact-item a { color: var(--accent); text-decoration: none; word-break: break-all; }
+    .contact-item a:hover { text-decoration: underline; }
+
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      transition: border-color .2s, transform .2s, background .3s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .skill-card-icon { font-size: 1.2rem; margin-bottom: .4rem; }
+    .skill-card-title { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .35rem; }
+    .skill-card-items { font-size: .83rem; color: var(--bio); line-height: 1.6; }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg); transition: background .3s; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s, box-shadow .2s, background .3s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity .2s;
+    }
+    .project-card:hover { border-color: rgba(56,189,248,.3); transform: translateY(-4px); box-shadow: 0 16px 36px rgba(0,0,0,.15); }
+    .project-card:hover::before { opacity: 1; }
+    .project-num { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--accent); opacity: .6; margin-bottom: .75rem; }
+    .project-title { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--h-color); margin-bottom: .7rem; }
+    .project-desc { font-size: .88rem; color: var(--muted); line-height: 1.7; flex: 1; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.4rem; }
+    .tech-tag {
+      background: rgba(56,189,248,.08);
+      border: 1px solid rgba(56,189,248,.15);
+      border-radius: 100px;
+      padding: .2rem .6rem;
+      font-size: .72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+    }
+    .project-links { margin-top: 1.4rem; }
+    .proj-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .82rem; font-weight: 600; color: var(--accent); text-decoration: none; transition: gap .2s; }
+    .proj-link:hover { gap: .5rem; }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--surface); transition: background .3s; }
+    .timeline { display: flex; flex-direction: column; gap: 2.5rem; max-width: 780px; }
+    .timeline-item {
+      position: relative;
+      padding-left: 1.6rem;
+      border-left: 2px solid var(--border);
+    }
+    .tl-dot {
+      position: absolute; left: -7px; top: 6px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      transition: background .3s;
+    }
+    .tl-date { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--accent); margin-bottom: .4rem; }
+    .tl-role { font-weight: 600; font-size: 1rem; color: var(--h-color); }
+    .tl-company { font-size: .85rem; color: var(--accent); margin-bottom: .75rem; }
+    .timeline-item ul { padding-left: 1.1rem; display: flex; flex-direction: column; gap: .4rem; }
+    .timeline-item li { font-size: .88rem; color: var(--muted); }
+
+    /* ── EDUCATION ── */
+    #education { background: var(--bg); transition: background .3s; }
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      max-width: 520px;
+      transition: border-color .2s, background .3s;
+    }
+    .edu-card:hover { border-color: rgba(56,189,248,.3); }
+    .edu-school { font-size: .75rem; font-family: 'JetBrains Mono', monospace; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .5rem; }
+    .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--h-color); margin-bottom: .4rem; }
+    .edu-meta { font-size: .85rem; color: var(--muted); margin-bottom: 1rem; }
+    .edu-gpa { display: inline-block; background: rgba(56,189,248,.1); border: 1px solid rgba(56,189,248,.2); border-radius: 6px; padding: .22rem .7rem; font-size: .8rem; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+    .edu-status { display: inline-block; background: rgba(129,140,248,.1); border: 1px solid rgba(129,140,248,.2); border-radius: 6px; padding: .22rem .7rem; font-size: .8rem; font-family: 'JetBrains Mono', monospace; color: var(--accent2); margin-left: .5rem; }
+
+    .award-card {
+      background: linear-gradient(135deg, rgba(56,189,248,.07), rgba(129,140,248,.07));
+      border: 1px solid rgba(56,189,248,.25);
+      border-radius: 16px;
+      padding: 1.8rem 2rem;
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .award-icon { font-size: 2.2rem; line-height: 1; }
+    .award-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--h-color); margin-bottom: .25rem; }
+    .award-sub { font-size: .87rem; color: var(--muted); line-height: 1.6; }
+    .award-badge { margin-top: .75rem; display: inline-block; background: rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.3); border-radius: 100px; padding: .22rem .85rem; font-size: .75rem; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+    /* ── DOCUMENTS ── */
+    #documents { background: var(--surface); transition: background .3s; }
+    .doc-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      transition: background .3s, border-color .3s;
+    }
+    .doc-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .doc-label { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+    .doc-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--h-color); }
+    .doc-embed {
+      width: 100%; height: 600px;
+      border: none;
+      display: block;
+    }
+
+    /* Transcript table */
+    .transcript-wrap { padding: 1.8rem; display: flex; flex-direction: column; gap: 2rem; }
+    .term-block {}
+    .term-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--h-color);
+      margin-bottom: .75rem;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .term-gpa {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      background: rgba(56,189,248,.1);
+      border: 1px solid rgba(56,189,248,.2);
+      border-radius: 100px;
+      padding: .15rem .65rem;
+      color: var(--accent);
+    }
+    .term-gpa.in-progress {
+      background: rgba(129,140,248,.1);
+      border-color: rgba(129,140,248,.2);
+      color: var(--accent2);
+    }
+    .trans-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .trans-table th {
+      text-align: left;
+      padding: .5rem .75rem;
+      background: var(--bg);
+      color: var(--muted);
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .trans-table td {
+      padding: .55rem .75rem;
+      color: var(--bio);
+      border-bottom: 1px solid var(--border);
+    }
+    .trans-table tr:last-child td { border-bottom: none; }
+    .trans-table td:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--accent); }
+    .cumulative-bar {
+      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: .88rem;
+      color: var(--muted);
+    }
+    .cumulative-bar strong { color: var(--h-color); }
+
+    .pdf-fallback {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem; padding: 3rem; text-align: center;
+      color: var(--muted); font-size: .95rem;
+    }
+    @media (max-width: 480px) {
+      .doc-embed { height: 420px; }
+      .trans-table { font-size: .78rem; }
+      .trans-table th, .trans-table td { padding: .4rem .5rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      transition: background .3s, border-color .3s;
+    }
+    .footer-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--accent); }
+    .footer-copy { font-size: .8rem; color: var(--muted); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s ease; }
+    .revealed { opacity: 1; transform: none; }
+
+    /* ── TABLET ── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      #home { padding-top: calc(64px + 36px); padding-bottom: 50px; }
+      section { padding: 60px 5%; }
+
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .stat-num { font-size: 1.7rem; }
+      .award-card { gap: .8rem; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2rem; }
+      .hero-cta { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .edu-card { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">Rabin</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#documents">Documents</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️</button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#experience" class="mobile-link">Experience</a>
+  <a href="#resume" class="mobile-link">Resume</a>
+  <a href="#education" class="mobile-link">Education</a>
+  <a href="#documents" class="mobile-link">Documents</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Open to Opportunities</div>
+    <h1>Hi, I'm <em>Rabin</em><br>Kunnananickal Binu</h1>
+    <p class="hero-sub">Software Developer &amp; Computer Programming student at George Brown College — building clean, scalable full-stack applications.</p>
+    <div class="hero-tags">
+      <span class="tag">Python</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">MySQL</span>
+      <span class="tag">HTML &amp; CSS</span>
+      <span class="tag">REST APIs</span>
+      <span class="tag">Agile / Scrum</span>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">2+</div>
+        <div class="stat-lbl">Years Work Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">3.5</div>
+        <div class="stat-lbl">Current GPA</div>
+      </div>
+      <div>
+        <div class="stat-num">6+</div>
+        <div class="stat-lbl">Technologies</div>
+      </div>
+      <div>
+        <div class="stat-num">📍</div>
+        <div class="stat-lbl">Toronto, Ontario</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <!-- // 01 — Profile -->
+    <h2>About Me</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div>
+      <div class="about-bio">
+        <p>I'm a Software Developer and second-year Computer Programming &amp; Analysis student at George Brown Polytechnic in Toronto, working toward my Ontario College Advanced Diploma.</p>
+        <p>I'm proficient in Python, JavaScript, SQL, and web development fundamentals, with hands-on experience in Agile and Scrum workflows. I enjoy building data-driven applications and solving real problems through clean, maintainable code.</p>
+        <p>I'm actively looking for opportunities where I can contribute to a collaborative engineering team and grow as a developer.</p>
+      </div>
+      <div class="contact-list">
+        <div class="contact-item"><span>📍</span> Toronto, Ontario</div>
+        <div class="contact-item"><span>✉️</span> <a href="mailto:rabin.kunnananickal@georgebrown.ca">rabin.kunnananickal@georgebrown.ca</a></div>
+        <div class="contact-item"><span>📞</span> (437) 872-1031</div>
+        <div class="contact-item"><span>🔗</span> <a href="https://linkedin.com/in/rabinkunnananickal" target="_blank">linkedin.com/in/rabinkunnananickal</a></div>
+        <div class="contact-item"><span>🐙</span> <a href="https://github.com/shikazukto" target="_blank">github.com/shikazukto</a></div>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-icon">💻</div>
+        <div class="skill-card-title">Languages</div>
+        <div class="skill-card-items">Python, JavaScript, SQL, HTML5, CSS3</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🗄️</div>
+        <div class="skill-card-title">Databases</div>
+        <div class="skill-card-items">MySQL, Relational DB Design, Normalization, Query Optimization</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">📊</div>
+        <div class="skill-card-title">Data & Analytics</div>
+        <div class="skill-card-items">Power BI, Tableau, Data Pipelines, Dashboards</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🛠️</div>
+        <div class="skill-card-title">Tools & Methods</div>
+        <div class="skill-card-items">Git, GitHub, Agile, Scrum, SDLC</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">⚙️</div>
+        <div class="skill-card-title">Concepts</div>
+        <div class="skill-card-items">Data Structures, Algorithms, REST APIs, Unit Testing</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🌐</div>
+        <div class="skill-card-title">Web Dev</div>
+        <div class="skill-card-items">HTML5, CSS3, JavaScript, Responsive Design</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <!-- // 02 — Work Samples -->
+    <h2>Projects</h2>
+  </div>
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="project-num">Project 01</div>
+      <div class="project-title">Relational Database System</div>
+      <div class="project-desc">Designed and implemented a normalized relational database for a simulated business scenario — including DDL/DML scripts, query optimization, and data integrity enforcement.</div>
+      <div class="tech-tags">
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">SQL</span>
+        <span class="tech-tag">Normalization</span>
+        <span class="tech-tag">ER Diagrams</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">Project 02</div>
+      <div class="project-title">School Performance Index Generator</div>
+      <div class="project-desc">A Python-based tool built as my High School Computer Science final project. Reads student exam data from a text file, calculates grade distributions, subject-wise and overall Performance Indexes, and exports a formatted multi-page PDF report — including mark-wise rankings and teacher performance summaries.</div>
+      <div class="tech-tags">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">fpdf</span>
+        <span class="tech-tag">Data Processing</span>
+        <span class="tech-tag">PDF Generation</span>
+        <span class="tech-tag">File I/O</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/shikazukto/Perfomance-index-generator" class="proj-link" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal">
+    <!-- // 03 — Professional Experience -->
+    <h2>Work History</h2>
+  </div>
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Feb 2026 – Present</div>
+      <div class="tl-role">Guest Service Attendant</div>
+      <div class="tl-company">Petro Canada · Scarborough, Ontario</div>
+      <ul>
+        <li>Diagnosed and resolved operational issues in real time using structured problem-solving.</li>
+        <li>Processed 50+ daily transactions with high accuracy, maintaining point-of-sale data integrity.</li>
+        <li>Coordinated with a team of 3 staff to meet shift objectives and share information clearly.</li>
+        <li>Managed full station operations independently during low-supervision shifts.</li>
+      </ul>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Apr 2025 – Feb 2026</div>
+      <div class="tl-role">Cashier</div>
+      <div class="tl-company">King Mini Mart · Toronto, Ontario</div>
+      <ul>
+        <li>Managed customer service, cash handling, and inventory simultaneously in a high-volume environment.</li>
+        <li>Maintained accuracy and efficiency under pressure during peak hours.</li>
+        <li>Quickly adopted new POS systems with minimal training, demonstrating adaptability.</li>
+        <li>Upheld operational standards and ensured consistent store procedures.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="reveal">
+    <!-- // 04 — Resume -->
+    <h2>Resume</h2>
+  </div>
+  <div class="doc-block reveal">
+    <div class="doc-header">
+      <div>
+        <div class="doc-label">📄 Curriculum Vitae</div>
+        <div class="doc-title">Rabin Kunnananickal Binu — Software Developer</div>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+        <a href="Rabin_Kunnananickal_Binu_Resume.pdf" target="_blank" class="btn btn-ghost">Open ↗</a>
+        <a href="Rabin_Kunnananickal_Binu_Resume.pdf" class="btn btn-primary" download>Download ↓</a>
+      </div>
+    </div>
+    <iframe src="Rabin_Kunnananickal_Binu_Resume.pdf" class="doc-embed" title="Resume PDF">
+      <div class="pdf-fallback">
+        <p>⚠️ PDF preview not available in this browser.</p>
+        <a href="Rabin_Kunnananickal_Binu_Resume.pdf" class="btn btn-primary" target="_blank">Open Resume PDF ↗</a>
+      </div>
+    </iframe>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="reveal">
+    <!-- // 05 — Education & Awards -->
+    <h2>Education</h2>
+  </div>
+  <div class="reveal">
+    <div class="edu-card">
+      <div class="edu-school">George Brown Polytechnic · Toronto, ON</div>
+      <div class="edu-degree">Computer Programming and Analysis</div>
+      <div class="edu-meta">Ontario College Advanced Diploma · Sep 2024 – Apr 2027</div>
+      <span class="edu-gpa">GPA: 3.5</span>
+      <span class="edu-status">⏳ In Progress</span>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="edu-card">
+      <div class="edu-school">Kendriya Vidyalaya · India</div>
+      <div class="edu-degree">High School Diploma</div>
+      <div class="edu-meta">July 2021 – March 2023</div>
+      <span class="edu-gpa">✅ Completed</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- DOCUMENTS -->
+<section id="documents">
+  <div class="reveal">
+    <!-- // 06 — Documents -->
+    <h2>Transcripts & Certificates</h2>
+  </div>
+
+  <!-- Transcript -->
+  <div class="doc-block reveal">
+    <div class="doc-header">
+      <div>
+        <div class="doc-label">📋 Unofficial Transcript</div>
+        <div class="doc-title">George Brown College — Computer Programming & Analysis</div>
+      </div>
+      <a href="Unofficial_Transcript.pdf" class="btn btn-ghost" download>Download ↓</a>
+    </div>
+
+    <!-- Transcript table -->
+    <div class="transcript-wrap">
+      <div class="term-block">
+        <div class="term-title">Fall 2024 <span class="term-gpa">GPA: 3.60</span></div>
+        <table class="trans-table">
+          <thead><tr><th>Course</th><th>Title</th><th>Credits</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>COMM 2000</td><td>Communicating Across Contexts</td><td>3.0</td><td>B+</td></tr>
+            <tr><td>COMP 1151</td><td>IT Essentials</td><td>4.0</td><td>B+</td></tr>
+            <tr><td>COMP 1234</td><td>Introduction to Web Development</td><td>4.0</td><td>A-</td></tr>
+            <tr><td>COMP 1236</td><td>Fundamentals of Computing Logic</td><td>4.0</td><td>A</td></tr>
+            <tr><td>COMP 1238</td><td>Introduction to Data Management</td><td>3.0</td><td>A+</td></tr>
+            <tr><td>MATH 1162</td><td>Math for Computer Technology I</td><td>4.0</td><td>B+</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="term-block">
+        <div class="term-title">Winter 2025 <span class="term-gpa">GPA: 3.12</span></div>
+        <table class="trans-table">
+          <thead><tr><th>Course</th><th>Title</th><th>Credits</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>COMP 1168</td><td>Database Management</td><td>4.0</td><td>A-</td></tr>
+            <tr><td>COMP 1202</td><td>Object Oriented Programming</td><td>4.0</td><td>B-</td></tr>
+            <tr><td>COMP 1235</td><td>Intro to Full-Stack Development</td><td>4.0</td><td>C</td></tr>
+            <tr><td>COMP 3044</td><td>Linux Essentials</td><td>3.0</td><td>A-</td></tr>
+            <tr><td>GSSC 1027</td><td>Personal Finance</td><td>3.0</td><td>A+</td></tr>
+            <tr><td>MATH 1172</td><td>Math for Computer Technology II</td><td>4.0</td><td>B</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="term-block">
+        <div class="term-title">Fall 2025 <span class="term-gpa">GPA: 2.20</span></div>
+        <table class="trans-table">
+          <thead><tr><th>Course</th><th>Title</th><th>Credits</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>COMP 1230</td><td>Advanced Web Programming</td><td>4.0</td><td>C+</td></tr>
+            <tr><td>COMP 2130</td><td>Application Development Using Java</td><td>4.0</td><td>B-</td></tr>
+            <tr><td>COMP 2136</td><td>Software Quality Assurance</td><td>4.0</td><td>D</td></tr>
+            <tr><td>COMP 2139</td><td>Web Application Development</td><td>4.0</td><td>C+</td></tr>
+            <tr><td>COMP 2147</td><td>Systems Analysis, Design & Testing</td><td>4.0</td><td>C+</td></tr>
+            <tr><td>GSCI 1007</td><td>History of Technology</td><td>3.0</td><td>B-</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="term-block">
+        <div class="term-title">Winter 2026 <span class="term-gpa in-progress">In Progress</span></div>
+        <table class="trans-table">
+          <thead><tr><th>Course</th><th>Title</th><th>Credits</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>COMP 2080</td><td>Data Structures & Algorithms</td><td>4.0</td><td>—</td></tr>
+            <tr><td>COMP 2148</td><td>Professional Workplace Competencies</td><td>3.0</td><td>—</td></tr>
+            <tr><td>COMP 2151</td><td>Agile Software Development</td><td>4.0</td><td>—</td></tr>
+            <tr><td>COMP 2152</td><td>Open Source Development</td><td>4.0</td><td>—</td></tr>
+            <tr><td>COMP 2154</td><td>System Development Project</td><td>4.0</td><td>—</td></tr>
+            <tr><td>GSSC 1083</td><td>Understanding Globalization</td><td>3.0</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cumulative-bar">
+        <span>Cumulative GPA (completed): <strong>2.96</strong></span>
+        <span>Total Credit Hours: <strong>67.0</strong></span>
+        <a href="Unofficial_Transcript.pdf" target="_blank" class="proj-link">View full PDF →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dean's Letter -->
+  <div class="doc-block reveal">
+    <div class="doc-header">
+      <div>
+        <div class="doc-label">🏆 Certificate / Award Letter</div>
+        <div class="doc-title">Dean's Honour List — Fall 2024</div>
+        <div class="award-sub" style="margin-top:.5rem;">George Brown College · Centre for Arts, Design and Information Technology<br>Awarded to students achieving a Term GPA of 3.5 or higher.</div>
+        <span class="award-badge" style="margin-top:.5rem;display:inline-block;">Signed by Ana Rita Morais, Dean</span>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+        <a href="Dean_letter_101516420.pdf" target="_blank" class="proj-link">View Full PDF →</a>
+      </div>
+    </div>
+    <div style="padding:2rem;">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-name">Rabin Kunnananickal Binu</div>
+    <div class="footer-copy">Software Developer · George Brown College</div>
+  </div>
+  <div class="footer-copy">© 2026 Rabin Kunnananickal Binu</div>
+</footer>
+
+<script>
+  // ── Theme toggle (persists across sessions)
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+  });
+
+  // ── Hamburger menu
+  const ham  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(a => {
+    a.addEventListener('click', () => {
+      ham.classList.remove('open');
+      menu.classList.remove('open');
+    });
+  });
+
+  // ── Scroll reveal
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
